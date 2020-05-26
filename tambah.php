@@ -29,14 +29,11 @@ if (isset($_POST["submit"])) {
             // jika registrasi berhasil tampilkan alert
             echo "<script>
             alert('Selamat Data Berhasil ditambahkan');
-            document.location.href='../';
+            document.location.href='index.php';
             </script>";
         } else {
             // jika gagal tampilkan error dari koneksi
-            echo "<script>
-            alert('mohon Maaf Data gagal ditambahkan');
-            document.location.href='../';
-            </script>";
+            echo mysqli_error($conn);
         }
     }
 }
