@@ -5,14 +5,14 @@ if (isset($_POST["submit"])) {
     // buat array untuk menampung error
     $error = [];
     // jalankan form validation
-    // jika input name kosong
+    // jika input judul kosong
     if (empty($_POST["judul"])) {
-        // masukan kedalam array erorr nama
+        // masukan kedalam array erorr judul
         $error["judul"] = "Judul tidak boleh kosong!";
     }
-    // jika input username kosong
+    // jika input pengarang kosong
     if (empty($_POST["pengarang"])) {
-        // masukan kedalam array erorr username
+        // masukan kedalam array erorr pengarang
         $error["pengarang"] = "Pengarang tidak boleh kosong!";
     }
     if (empty($_POST["penerbit"])) {
@@ -24,9 +24,9 @@ if (isset($_POST["submit"])) {
 
     // jika array error kosong
     if (count($error) == 0) {
-        // jalankan fungsi register
+        // jalankan fungsi tambah
         if (tambah($_POST) > 0) {
-            // jika registrasi berhasil tampilkan alert
+            // jika berhasil tampilkan alert
             echo "<script>
             alert('Selamat Data Berhasil ditambahkan');
             document.location.href='index.php';

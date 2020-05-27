@@ -45,8 +45,8 @@ require('template/header.php');
                     <td><?= $book["Judul"]; ?></td>
                     <td><?= $book["Pengarang"]; ?></td>
                     <td><?= $book["Penerbit"]; ?></td>
-                    <td><a href="#" class="badge badge-primary mr-2">Edit</a>
-                        <a href="#" class="badge badge-danger">Delet</a>
+                    <td><a href="edit.php?id=<?php echo $book["id"];?>" class="badge badge-primary mr-2">Edit</a>
+                        <a href="delet.php?id=<?php echo $book["id"];?>" onclick="return confirm('Anda akan menghapus data buku, yakin?');" class="badge badge-danger">Delet</a>
                     </td>
                 </tr>
                 <?php $i++; ?>

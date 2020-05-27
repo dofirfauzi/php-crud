@@ -32,3 +32,31 @@ function tambah($data)
 
     return mysqli_affected_rows($conn);
 }
+
+function delet($id){
+    global $conn;
+    mysqli_query($conn, "DELETE FROM books WHERE id = $id");
+    
+    return mysqli_affected_rows($conn);
+}
+
+function edit($data){
+    global $conn;
+    $id = $data["id"];
+    $cover = htmlspecialchars($data["cover"]);
+    $judul = htmlspecialchars($data["judul"]);
+    $pengarang = htmlspecialchars($data["pengarang"]);
+    $penerbit = htmlspecialchars($data["penerbit"]);
+
+    $query = "UPDATE books SET
+    cover = '$cover',
+    Judul = '$judul',
+    Pengarang = '$pengarang',
+    Penerbit = '$penerbit'
+    WHERE id = $id
+    ";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
