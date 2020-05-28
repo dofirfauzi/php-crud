@@ -63,19 +63,19 @@ require('template/header.php');
     <input type="hidden" name="id" value="<?php echo $book["id"]; ?>">
         <div class="form-group">
             <label for="judul">Judul Buku :</label>
-            <input type="text" class="form-control" id="judul" name="judul" value="<?php echo $book["Judul"]; ?>">
+            <input type="text" class="form-control" id="judul" name="judul" value="<?php if (!isset($_POST["submit"])) {echo $book["judul"];} else {echo $_POST["judul"];}?>">
             <?php if(isset($error["judul"])) {?>
             <small id="judul" class="form-text text-danger"><?php echo $error["judul"];?></small> <?php } ?>
         </div>
         <div class="form-group">
             <label for="pengarang">Pengarang :</label>
-            <input type="text" class="form-control" id="pengarang" name="pengarang" value="<?php echo $book["Pengarang"]; ?>">
+            <input type="text" class="form-control" id="pengarang" name="pengarang" value="<?php if (!isset($_POST["submit"])) {echo $book["pengarang"];} else {echo $_POST["pengarang"];}?>">
             <?php if(isset($error["pengarang"])) {?>
             <small id="judul" class="form-text text-danger"><?php echo $error["pengarang"];?></small> <?php } ?>
         </div>
         <div class="form-group">
             <label for="penerbit">Penerbit :</label>
-            <input type="text" class="form-control" id="penerbit" name="penerbit" value="<?php echo $book["Penerbit"]; ?>">
+            <input type="text" class="form-control" id="penerbit" name="penerbit" value="<?php if (!isset($_POST["submit"])) {echo $book["penerbit"];} else {echo $_POST["penerbit"];}?>">
             <?php if(isset($error["penerbit"])) {?>
             <small id="judul" class="form-text text-danger"><?php echo $error["penerbit"];?></small> <?php } ?>
         </div>

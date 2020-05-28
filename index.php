@@ -3,6 +3,13 @@ require('functions/functions.php');
 
 $books = query("SELECT * FROM books");
 
+if (isset($_POST["cari"])) {
+    $books = cari($_POST["keyword"]);
+    if (empty($books)) {
+        $error = "Mohon maaf data tidak ditemukan";
+    }
+}
+
 require('template/header.php');
 ?>
 <div class="jumbotron jumbotron-fluid">
@@ -17,12 +24,14 @@ require('template/header.php');
             <a class="btn btn-warning" type="submit" href="tambah.php">Tambah Data</a>
         </div>
         <div class="col-lg-4 mb-2">
+        <form action="" method="post">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Find something" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <input type="text" class="form-control" placeholder="Find something" id="keyword" name="keyword" autofocus autocomplete="off">
                 <div class="input-group-append">
-                    <span class="input-group-text" id="basic-addon2">Search</span>
+                    <button type="submit" name="cari" class="input-group-text" id="keyword">Search</button>
                 </div>
             </div>
+        </form>
         </div>
     </div>
     <table class="table table-hover table-responsive-sm">
@@ -42,9 +51,9 @@ require('template/header.php');
                 <tr>
                     <th scope="row"><?= $i; ?></th>
                     <td><img class="img-thumbnail" width="40px" src="img\<?= $book["cover"]; ?>" alt=""></td>
-                    <td><?= $book["Judul"]; ?></td>
-                    <td><?= $book["Pengarang"]; ?></td>
-                    <td><?= $book["Penerbit"]; ?></td>
+                    <td><?= $book["judul"]; ?></td>
+                    <td><?= $book["pengarang"]; ?></td>
+                    <td><?= $book["penerbit"]; ?></td>
                     <td><a href="edit.php?id=<?php echo $book["id"];?>" class="badge badge-primary mr-2">Edit</a>
                         <a href="delet.php?id=<?php echo $book["id"];?>" onclick="return confirm('Anda akan menghapus data buku, yakin?');" class="badge badge-danger">Delet</a>
                     </td>
@@ -53,6 +62,10 @@ require('template/header.php');
             <?php } ?>
         </tbody>
     </table>
+    <?php 
+        if (isset($error)) {?>
+        <p class="text-danger text-center font-italic"><?php echo $error; ?> </p>
+        <?php } ?>
 </div>
 
 

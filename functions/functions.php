@@ -50,13 +50,22 @@ function edit($data){
 
     $query = "UPDATE books SET
     cover = '$cover',
-    Judul = '$judul',
-    Pengarang = '$pengarang',
-    Penerbit = '$penerbit'
+    judul = '$judul',
+    pengarang = '$pengarang',
+    penerbit = '$penerbit'
     WHERE id = $id
     ";
 
     mysqli_query($conn, $query);
 
     return mysqli_affected_rows($conn);
+}
+
+function cari($keyword){
+    $query = "SELECT * FROM books WHERE
+                judul LIKE '%$keyword%' OR
+                pengarang LIKE '%$keyword%' OR
+                penerbit LIKE '%$keyword%'
+                ";
+    return query($query);
 }
