@@ -15,10 +15,16 @@ function query($query)
 function tambah($data)
 {
     global $conn;
-    $cover = htmlspecialchars($data["cover"]);
     $judul = htmlspecialchars($data["judul"]);
     $pengarang = htmlspecialchars($data["pengarang"]);
     $penerbit = htmlspecialchars($data["penerbit"]);
+    
+    // $cover = htmlspecialchars($data["cover"]);
+    // Upload file
+    $cover = upload();
+    if (!$cover) {
+        return false;
+    }
 
     $query = "INSERT INTO books VALUES(
     '',
@@ -33,6 +39,46 @@ function tambah($data)
     return mysqli_affected_rows($conn);
 }
 
+function upload(){
+    // ambil data 
+    $fileName = $_FILES["cover"]["name"];
+    $tmpName = $_FILES["cover"]["tmp_name"];
+    $fileSize = $_FILES["cover"]["size"];
+
+    // ekstensi file yang boleh diupload
+    $ekstensiFileValid = ['jpg','jpeg','png'];
+
+    // ambil extensi file yang diupload
+    $explodeFile = explode('.',$fileName);
+    $typeFile =strtolower(end($explodeFile));
+
+    // cek exstensi file yang diupload 
+    if (!in_array($typeFile,$ekstensiFileValid)) {
+        echo "<script>
+            alert('Maaf format file tidak dizinkan! Format file harus berupa jpg, jpeg atau png');
+            </script>";
+        return false;
+    }
+
+    // cek size file tidak boleh lebih dari 5 mb
+    if ($fileSize > 5000000) {
+        echo "<script>
+            alert('Maaf ukuran file terlalu besar! ukuran file maximal 5 MB');
+            </script>";
+        return false;
+    }
+
+    // Generate nama file baru
+    $newFileName = uniqid();
+    $newFileName .='.';
+    $newFileName .=$typeFile;
+
+    // upload file ke direktori
+    move_uploaded_file($tmpName,'img/' . $newFileName);
+    return $newFileName;
+
+}
+
 function delet($id){
     global $conn;
     mysqli_query($conn, "DELETE FROM books WHERE id = $id");
@@ -43,11 +89,21 @@ function delet($id){
 function edit($data){
     global $conn;
     $id = $data["id"];
-    $cover = htmlspecialchars($data["cover"]);
     $judul = htmlspecialchars($data["judul"]);
     $pengarang = htmlspecialchars($data["pengarang"]);
     $penerbit = htmlspecialchars($data["penerbit"]);
+    $coverLama = htmlspecialchars($data["coverLama"]);
 
+    // cek user upload cover baru atau tidak
+    // jika user tidak upload cover baru
+    if ($_FILES["cover"]["error"] === 4 ) {
+        // cover disii dengan cover lama
+        $cover = $coverLama;
+    } else {
+        // jika user upload cover baru, cover diisi dari hasil fungsi upload
+        $cover = upload();
+    }
+    
     $query = "UPDATE books SET
     cover = '$cover',
     judul = '$judul',

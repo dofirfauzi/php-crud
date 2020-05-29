@@ -30,9 +30,6 @@ if (isset($_POST["submit"])) {
     if (empty($_POST["penerbit"])) {
         $error["penerbit"] = "Penerbit tidak boleh kosong!";
     }
-    if (empty($_POST["cover"])) {
-        $error["cover"] = "Cover tidak boleh kosong!";
-    }
 
     // jika array error kosong
     if (count($error) == 0) {
@@ -59,8 +56,12 @@ require('template/header.php');
 </div>
 
 <div class="container">
-    <form action="" method="post">
+<div class="row">
+    <div class="col-md-4 text-center"><img class="img-fluid img-thumbnail mb-3" width="250" src="img/<?php echo $book["cover"]; ?>" alt=""></div>
+    <div class="col">
+    <form action="" method="post" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?php echo $book["id"]; ?>">
+    <input type="hidden" name="coverLama" value="<?php echo $book["cover"]; ?>">
         <div class="form-group">
             <label for="judul">Judul Buku :</label>
             <input type="text" class="form-control" id="judul" name="judul" value="<?php if (!isset($_POST["submit"])) {echo $book["judul"];} else {echo $_POST["judul"];}?>">
@@ -82,12 +83,12 @@ require('template/header.php');
         <div class="form-group mb-4">
             <div>
                 <label for="cover">Cover :</label></div>
-            <input type="file" id="cover" name="cover" value="<?php echo $book["cover"]; ?>">
-            <?php if(isset($error["cover"])) {?>
-            <small id="judul" class="form-text text-danger"><?php echo $error["cover"];?></small> <?php } ?>
+            <input type="file" id="cover" name="cover">
         </div>
         <button type="submit" class="btn btn-primary" name="submit">Edit Data</button>
     </form>
+    </div>
+    </div>
 </div>
 
 

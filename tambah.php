@@ -2,6 +2,7 @@
 require('functions/functions.php');
 // cek apakah tombol submit sudah di klik
 if (isset($_POST["submit"])) {
+    // var_dump($_POST);var_dump($_FILES); die;
     // buat array untuk menampung error
     $error = [];
     // jalankan form validation
@@ -18,8 +19,8 @@ if (isset($_POST["submit"])) {
     if (empty($_POST["penerbit"])) {
         $error["penerbit"] = "Penerbit tidak boleh kosong!";
     }
-    if (empty($_POST["cover"])) {
-        $error["cover"] = "Cover tidak boleh kosong!";
+    if (empty($_FILES["cover"]["name"])) {
+        $error["cover"] = "oops tidak ada gambar yang diupload!";
     }
 
     // jika array error kosong
@@ -33,6 +34,10 @@ if (isset($_POST["submit"])) {
             </script>";
         } else {
             // jika gagal tampilkan error dari koneksi
+            echo "<script>
+            alert('Maaf data gagal ditambahkan');
+            document.location.href='index.php';
+            </script>";
             echo mysqli_error($conn);
         }
     }
@@ -47,7 +52,7 @@ require('template/header.php');
 </div>
 
 <div class="container">
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="judul">Judul Buku :</label>
             <input type="text" class="form-control" id="judul" name="judul" value="<?php if (isset($_POST["submit"])) echo $_POST["judul"]; ?>">
@@ -58,20 +63,20 @@ require('template/header.php');
             <label for="pengarang">Pengarang :</label>
             <input type="text" class="form-control" id="pengarang" name="pengarang" value="<?php if (isset($_POST["submit"])) echo $_POST["pengarang"]; ?>">
             <?php if(isset($error["pengarang"])) {?>
-            <small id="judul" class="form-text text-danger"><?php echo $error["pengarang"];?></small> <?php } ?>
+            <small id="pengarang" class="form-text text-danger"><?php echo $error["pengarang"];?></small> <?php } ?>
         </div>
         <div class="form-group">
             <label for="penerbit">Penerbit :</label>
             <input type="text" class="form-control" id="penerbit" name="penerbit" value="<?php if (isset($_POST["submit"])) echo $_POST["penerbit"]; ?>">
             <?php if(isset($error["penerbit"])) {?>
-            <small id="judul" class="form-text text-danger"><?php echo $error["penerbit"];?></small> <?php } ?>
+            <small id="penerbit" class="form-text text-danger"><?php echo $error["penerbit"];?></small> <?php } ?>
         </div>
         <div class="form-group mb-4">
             <div>
                 <label for="cover">Cover :</label></div>
             <input type="file" id="cover" name="cover">
             <?php if(isset($error["cover"])) {?>
-            <small id="judul" class="form-text text-danger"><?php echo $error["cover"];?></small> <?php } ?>
+            <small id="cover" class="form-text text-danger"><?php echo $error["cover"];?></small> <?php } ?>
         </div>
         <button type="submit" class="btn btn-primary" name="submit">Tambah Data</button>
     </form>
