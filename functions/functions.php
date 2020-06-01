@@ -123,5 +123,19 @@ function cari($keyword){
                 pengarang LIKE '%$keyword%' OR
                 penerbit LIKE '%$keyword%'
                 ";
+    $dataPerPage = 5;
+    $jumlahDataPencarian = count(query($query));
+    $totalPage = ($jumlahDataPencarian / $dataPerPage);
+    $pageAktif = (isset($_GET["page"])) ? $_GET["page"]:1;
+    $dataAwal = ($dataPerPage * $pageAktif) - $dataPerPage;
+    
+    $query = "SELECT * FROM books WHERE
+    judul LIKE '%$keyword%' OR
+    pengarang LIKE '%$keyword%' OR
+    penerbit LIKE '%$keyword%'
+    LIMIT $dataAwal, $dataPerPage
+    ";
+    return $jumlahDataPencarian;
     return query($query);
 }
+

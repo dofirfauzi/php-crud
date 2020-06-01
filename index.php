@@ -9,12 +9,35 @@ $dataAwal = ($dataPerPage * $pageAktif) - $dataPerPage;
 
 $books = query("SELECT * FROM books limit $dataAwal , $dataPerPage");
 
+
 if (isset($_POST["cari"])) {
-    $books = cari($_POST["keyword"]);
+    $keyword = $_POST["keyword"];
+    $query = "SELECT * FROM books WHERE
+                judul LIKE '%$keyword%' OR
+                pengarang LIKE '%$keyword%' OR
+                penerbit LIKE '%$keyword%'
+                ";
+
+    $dataPerPage = 5;
+    $jumlahData = count(query($query));
+    $totalPage =ceil($jumlahData / $dataPerPage);
+    $pageAktif = (isset($_GET["page"])) ? $_GET["page"]:1;
+    $dataAwal = ($dataPerPage * $pageAktif) - $dataPerPage;
+
+    $query = "SELECT * FROM books WHERE
+    judul LIKE '%$keyword%' OR
+    pengarang LIKE '%$keyword%' OR
+    penerbit LIKE '%$keyword%'
+    LIMIT $dataAwal, $dataPerPage
+    ";
+
+    $books = query($query);
+
     if (empty($books)) {
         $error = "Mohon maaf data tidak ditemukan";
     }
 }
+
 
 require('template/header.php');
 ?>
@@ -32,7 +55,7 @@ require('template/header.php');
         <div class="col-lg-4 mb-2">
         <form action="" method="post">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Find something" id="keyword" name="keyword" autofocus autocomplete="off">
+                <input type="text" class="form-control" placeholder="Find something" id="keyword" name="keyword" autofocus autocomplete="off" value="<?php if(isset($_POST["cari"])) echo $_POST["keyword"]; ?>">
                 <div class="input-group-append">
                     <button type="submit" name="cari" class="input-group-text" id="keyword">Search</button>
                 </div>
@@ -68,6 +91,7 @@ require('template/header.php');
             <?php } ?>
         </tbody>
     </table>
+    <small class="form-text text-muted font-italic">menampilkan <?php echo $i - 1; ?> data dari <?php echo $jumlahData; ?></small> 
     <?php 
         if (isset($error)) {?>
         <p class="text-danger text-center font-italic"><?php echo $error; ?> </p>
